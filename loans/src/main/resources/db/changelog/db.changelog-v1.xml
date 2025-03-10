@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <!-- Changeset to create a new table  -->
+    <changeSet id="loans-schema" author="sparsh">
+        <createTable tableName="loans">
+            <column name="loan_id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="mobile_number" type="varchar(15)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="loan_number" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="loan_type" type="varchar(150)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="total_loan" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="amount_paid" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="outstanding_amount" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_by" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="timestamp">
+                <constraints nullable="true"/>
+            </column>
+            <column name="updated_by" type="varchar(50)">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>
