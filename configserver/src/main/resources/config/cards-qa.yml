@@ -1,0 +1,6 @@
+build:
+  version: 1.0
+
+contact-info:
+  name: "A sample custom config in cards QA yml file"
+  address: "abc abc, xyz zzz"

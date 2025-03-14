@@ -1,0 +1,66 @@
+services:
+  configserver:
+    image: "sparshverma/configserver:v1"
+    container_name: configserver-ms
+    ports:
+      - "8071:8071"
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+    networks:
+      - sv
+  accounts:
+    image: "sparshverma/accounts:v1"
+    container_name: accounts-ms
+    depends_on:
+      - configserver
+    ports:
+      - "8080:8080"
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+    networks:
+      - sv
+    environment:
+      SPRING_APPLICATION_NAME: "accounts"
+      SPRING_CONFIG_IMPORT: "configserver:http://configserver:8071/"
+      SPRING_PROFILES_ACTIVE: default
+  cards:
+    image: "sparshverma/cards:v1"
+    container_name: cards-ms
+    depends_on:
+      - configserver
+    ports:
+      - "9001:9001"
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+    networks:
+      - sv
+    environment:
+      SPRING_APPLICATION_NAME: "cards"
+      SPRING_CONFIG_IMPORT: "configserver:http://configserver:8071/"
+      SPRING_PROFILES_ACTIVE: default
+  loans:
+    image: "sparshverma/loans:v1"
+    container_name: loans-ms
+    depends_on:
+      - configserver
+    ports:
+      - "8090:8090"
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+    networks:
+      - sv
+    environment:
+      SPRING_APPLICATION_NAME: "loans"
+      SPRING_CONFIG_IMPORT: "configserver:http://configserver:8071/"
+      SPRING_PROFILES_ACTIVE: default
+networks:
+  sv:
+    driver: "bridge"
