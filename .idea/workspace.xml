@@ -4,10 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="51be01d6-dac4-40ee-adb6-40ab7f541deb" name="Changes" comment="loans and cards yml changes">
-      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+    <list default="true" id="51be01d6-dac4-40ee-adb6-40ab7f541deb" name="Changes" comment="missing files added">
+      <change beforePath="$PROJECT_DIR$/accounts/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/accounts/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cards/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/cards/pom.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,7 +39,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "Application.CardsApplication.executor": "Run",
+    "Application.CardsApplication.executor": "Debug",
     "Application.DemoApplication.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
@@ -109,7 +108,31 @@
       <option name="project" value="LOCAL" />
       <updated>1741962549450</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="yml changes">
+      <option name="closed" value="true" />
+      <created>1741977008800</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1741977008800</updated>
+    </task>
+    <task id="LOCAL-00004" summary="dependency added in cards and loans service">
+      <option name="closed" value="true" />
+      <created>1741977750440</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1741977750440</updated>
+    </task>
+    <task id="LOCAL-00005" summary="missing files added">
+      <option name="closed" value="true" />
+      <created>1741977843868</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1741977843868</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -117,7 +140,10 @@
     <option name="CHECK_NEW_TODO" value="false" />
     <MESSAGE value="code changes" />
     <MESSAGE value="loans and cards yml changes" />
-    <option name="LAST_COMMIT_MESSAGE" value="loans and cards yml changes" />
+    <MESSAGE value="yml changes" />
+    <MESSAGE value="dependency added in cards and loans service" />
+    <MESSAGE value="missing files added" />
+    <option name="LAST_COMMIT_MESSAGE" value="missing files added" />
     <option name="NON_MODAL_COMMIT_POSTPONE_SLOW_CHECKS" value="false" />
   </component>
 </project>
