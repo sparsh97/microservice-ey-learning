@@ -1,3 +1,6 @@
+build:
+  version: 3.0
+
 contact-info:
-  name: "test prod"
-  address: "address test prod"
+  name: "A sample custom config in prod yml file"
+  address: "abc abc, xyz zzz - PROD"

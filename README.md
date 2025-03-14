@@ -6,8 +6,6 @@ Learning microservice using spring boot, docker, and k8s.
 
 - [JDK 21](https://adoptium.net/temurin/releases/?os=windows)
 - [Maven 3](https://maven.apache.org)
-- # latest RabbitMQ 4.0.x
-docker run -it --rm --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:4.0-management
 
 ## Running the application locally
 

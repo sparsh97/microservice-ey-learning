@@ -1,5 +1,6 @@
 package com.eazybytes.accounts.controller;
 
+import com.eazybytes.accounts.config.ContactInfoConfig;
 import com.eazybytes.accounts.constants.AccountsConstants;
 import com.eazybytes.accounts.dto.CustomerDTO;
 import com.eazybytes.accounts.dto.ResponseDto;
@@ -32,6 +33,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class AccountController {
 
     private final IAccountService accountService;
+
+    private final ContactInfoConfig infoConfig;
 
     @GetMapping(path = "/hello-world")
     public ResponseEntity<String> helloWorld() {
@@ -69,4 +72,10 @@ public class AccountController {
         }
         return new ResponseEntity<>(new ResponseDto(AccountsConstants.STATUS_417, AccountsConstants.MESSAGE_417_DELETE), HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @GetMapping(path = "/contact-info")
+    public ResponseEntity<ContactInfoConfig> getContactInfo() {
+        return new ResponseEntity<>(infoConfig,HttpStatus.OK);
+    }
+
 }
