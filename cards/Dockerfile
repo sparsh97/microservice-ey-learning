@@ -14,19 +14,19 @@ COPY src ./src
 # Build the application
 RUN mvn clean package -DskipTests
 
+# Use a lightweight JDK image for running the application
 FROM eclipse-temurin:21-jdk-alpine
 
-# Set the working directory inside the container
 WORKDIR /app
 
 # Install curl, grep, and wget
 RUN apk --no-cache add curl grep wget
 
-# Copy the Spring Boot application JAR file into the container
+# Copy the built JAR from the builder stage
 COPY --from=builder /app/target/*.jar app.jar
 
-# Expose the application port (change this based on your Spring Boot config)
-EXPOSE 8080
+# Expose the application port
+EXPOSE 9001
 
 # Run the application
 ENTRYPOINT ["java", "-jar", "app.jar"]
