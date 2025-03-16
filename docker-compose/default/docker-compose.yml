@@ -1,4 +1,61 @@
 services:
+  accountsdb:
+    image: postgres:17.4
+    environment:
+      POSTGRES_USER: postgress
+      POSTGRES_PASSWORD: postgress
+      POSTGRES_DB: accounts
+    ports:
+      - "5432:5432"
+    volumes:
+      - accounts_db:/var/lib/postgresql/data
+    networks:
+      - sv
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgress -d accounts" ]
+      interval: 10s   # Check every 10 seconds
+      timeout: 5s     # Timeout if no response in 5 seconds
+      retries: 5      # Retry up to 5 times before marking as unhealthy
+      start_period: 10s # Wait 10s before the first check
+
+  loansdb:
+    image: postgres:17.4
+    environment:
+      POSTGRES_USER: postgress
+      POSTGRES_PASSWORD: postgress
+      POSTGRES_DB: loans
+    ports:
+      - "5434:5432"
+    volumes:
+      - loans_db:/var/lib/postgresql/data
+    networks:
+      - sv
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgress -d loans" ]
+      interval: 10s   # Check every 10 seconds
+      timeout: 5s     # Timeout if no response in 5 seconds
+      retries: 5      # Retry up to 5 times before marking as unhealthy
+      start_period: 10s # Wait 10s before the first check
+
+  cardsdb:
+    image: postgres:17.4
+    environment:
+      POSTGRES_USER: postgress
+      POSTGRES_PASSWORD: postgress
+      POSTGRES_DB: cards
+    ports:
+      - "5433:5432"
+    volumes:
+      - cards_db:/var/lib/postgresql/data
+    networks:
+      - sv
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgress -d cards" ]
+      interval: 10s   # Check every 10 seconds
+      timeout: 5s     # Timeout if no response in 5 seconds
+      retries: 5      # Retry up to 5 times before marking as unhealthy
+      start_period: 10s # Wait 10s before the first check
+
   rabbit:
     image: rabbitmq:3.13-management
     hostname: rabbitmq
@@ -15,8 +72,8 @@ services:
       - sv
 
   configserver:
-    image: "sparshverma/configserver:v2"
-    container_name: configserver-ms
+    image: "sparshverma/configserver:v3"
+    container_name: configserver-ms-v3
     ports:
       - "8071:8071"
     depends_on:
@@ -35,9 +92,11 @@ services:
       - sv
 
   accounts:
-    image: "sparshverma/accounts:v2"
-    container_name: accounts-ms
+    image: "sparshverma/accounts:v3"
+    container_name: accounts-ms-v3
     depends_on:
+      accountsdb:
+        condition: service_healthy
       configserver:
         condition: service_healthy
     ports:
@@ -49,11 +108,15 @@ services:
       SPRING_CONFIG_IMPORT: "configserver:http://configserver:8071/"
       SPRING_PROFILES_ACTIVE: default
       SPRING_RABBITMQ_HOST: "rabbit"
+      SPRING_DATASOURCE_URL: "jdbc:postgresql://accountsdb:5432/accounts"
+      SPRING_DATASOURCE_USERNAME: "postgress"
 
   cards:
-    image: "sparshverma/cards:v2"
-    container_name: cards-ms
+    image: "sparshverma/cards:v3"
+    container_name: cards-ms-v3
     depends_on:
+      cardsdb:
+        condition: service_healthy
       configserver:
         condition: service_healthy
     ports:
@@ -65,11 +128,15 @@ services:
       SPRING_CONFIG_IMPORT: "configserver:http://configserver:8071/"
       SPRING_PROFILES_ACTIVE: default
       SPRING_RABBITMQ_HOST: "rabbit"
+      SPRING_DATASOURCE_URL: "jdbc:postgresql://cardsdb:5432/cards"
+      SPRING_DATASOURCE_USERNAME: "postgress"
 
   loans:
-    image: "sparshverma/loans:v2"
-    container_name: loans-ms
+    image: "sparshverma/loans:v3"
+    container_name: loans-ms-v3
     depends_on:
+      loansdb:
+        condition: service_healthy
       configserver:
         condition: service_healthy
     ports:
@@ -81,7 +148,14 @@ services:
       SPRING_CONFIG_IMPORT: "configserver:http://configserver:8071/"
       SPRING_PROFILES_ACTIVE: default
       SPRING_RABBITMQ_HOST: "rabbit"
+      SPRING_DATASOURCE_URL: "jdbc:postgresql://loansdb:5432/loans"
+      SPRING_DATASOURCE_USERNAME: "postgress"
 
 networks:
   sv:
     driver: "bridge"
+
+volumes:
+  accounts_db:
+  loans_db:
+  cards_db:

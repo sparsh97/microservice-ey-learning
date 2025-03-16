@@ -4,11 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="51be01d6-dac4-40ee-adb6-40ab7f541deb" name="Changes" comment="DockerFile added for all services">
-      <change afterPath="$PROJECT_DIR$/docker-compose/prod/common-config.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docker-compose/prod/docker-compose.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docker-compose/qa/common-config.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docker-compose/qa/docker-compose.yml" afterDir="false" />
+    <list default="true" id="51be01d6-dac4-40ee-adb6-40ab7f541deb" name="Changes" comment="docker compose for prod and qa">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/accounts/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/accounts/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/accounts/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/accounts/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cards/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/cards/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cards/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/cards/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose/default/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose/default/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/loans/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/loans/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/loans/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/loans/src/main/resources/application.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,6 +57,7 @@
   "keyToString": {
     "Application.CardsApplication.executor": "Debug",
     "Application.DemoApplication.executor": "Run",
+    "Docker.default.accountsdb: Compose Deployment.executor": "Run",
     "Docker.default: Compose Deployment.executor": "Run",
     "Maven.configserver [clean,install].executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
@@ -64,6 +69,12 @@
     "last_opened_file_path": "C:/Users/spars/Documents/microservice-ey-learning/docker-compose/qa"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\spars\Documents\microservice-ey-learning\docker-compose\qa" />
+      <recent name="C:\Users\spars\Documents\microservice-ey-learning\docker-compose\prod" />
+    </key>
+  </component>
   <component name="RunAnythingCache">
     <option name="myCommands">
       <command value="mvn clean install" />
@@ -108,9 +119,23 @@
       </deployment>
       <method v="2" />
     </configuration>
+    <configuration name="default.accountsdb: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
+      <deployment type="docker-compose.yml">
+        <settings>
+          <option name="services">
+            <list>
+              <option value="accountsdb" />
+            </list>
+          </option>
+          <option name="sourceFilePath" value="docker-compose/default/docker-compose.yml" />
+        </settings>
+      </deployment>
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="Docker.default: Compose Deployment" />
+        <item itemvalue="Docker.default.accountsdb: Compose Deployment" />
         <item itemvalue="Application.CardsApplication" />
         <item itemvalue="Application.DemoApplication" />
       </list>
@@ -181,7 +206,15 @@
       <option name="project" value="LOCAL" />
       <updated>1742121361352</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="docker compose for prod and qa">
+      <option name="closed" value="true" />
+      <created>1742122379377</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1742122379377</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -193,7 +226,8 @@
     <MESSAGE value="dependency added in cards and loans service" />
     <MESSAGE value="missing files added" />
     <MESSAGE value="DockerFile added for all services" />
-    <option name="LAST_COMMIT_MESSAGE" value="DockerFile added for all services" />
+    <MESSAGE value="docker compose for prod and qa" />
+    <option name="LAST_COMMIT_MESSAGE" value="docker compose for prod and qa" />
     <option name="NON_MODAL_COMMIT_POSTPONE_SLOW_CHECKS" value="false" />
   </component>
 </project>
