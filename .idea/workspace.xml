@@ -4,12 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="51be01d6-dac4-40ee-adb6-40ab7f541deb" name="Changes" comment="postgress related changes">
-      <change afterPath="$PROJECT_DIR$/configserver/src/main/resources/config/eurekaserver.yml" afterDir="false" />
+    <list default="true" id="51be01d6-dac4-40ee-adb6-40ab7f541deb" name="Changes" comment="eurekaserver added">
       <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/accounts/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/accounts/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/accounts/src/main/java/com/eazybytes/accounts/DemoApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/accounts/src/main/java/com/eazybytes/accounts/DemoApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/accounts/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/accounts/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/configserver/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/configserver/src/main/resources/application.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,6 +56,7 @@
     "Application.CardsApplication.executor": "Debug",
     "Application.ConfigserverApplication.executor": "Run",
     "Application.DemoApplication.executor": "Run",
+    "Application.EurekaserverApplication.executor": "Run",
     "Docker.default.accountsdb: Compose Deployment.executor": "Run",
     "Docker.default: Compose Deployment.executor": "Run",
     "Maven.configserver [clean,install].executor": "Run",
@@ -78,13 +80,13 @@
       <command value="mvn clean install" />
     </option>
   </component>
-  <component name="RunManager" selected="Application.EurekaserverApplication">
-    <configuration name="CardsApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="com.eazybytes.cards.CardsApplication" />
-      <module name="cards" />
+  <component name="RunManager" selected="Application.DemoApplication">
+    <configuration name="ConfigserverApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.eazybytes.configserver.ConfigserverApplication" />
+      <module name="configserver" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="com.eazybytes.cards.*" />
+          <option name="PATTERN" value="com.eazybytes.configserver.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -92,12 +94,12 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="ConfigserverApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="com.eazybytes.configserver.ConfigserverApplication" />
-      <module name="configserver" />
+    <configuration name="DemoApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.eazybytes.accounts.DemoApplication" />
+      <module name="demo" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="com.eazybytes.configserver.*" />
+          <option name="PATTERN" value="com.eazybytes.accounts.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -145,11 +147,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.DemoApplication" />
         <item itemvalue="Application.EurekaserverApplication" />
         <item itemvalue="Application.ConfigserverApplication" />
         <item itemvalue="Docker.default: Compose Deployment" />
         <item itemvalue="Docker.default.accountsdb: Compose Deployment" />
-        <item itemvalue="Application.CardsApplication" />
       </list>
     </recent_temporary>
   </component>
@@ -234,7 +236,15 @@
       <option name="project" value="LOCAL" />
       <updated>1742131691105</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="eurekaserver added">
+      <option name="closed" value="true" />
+      <created>1742148549899</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1742148549899</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -248,7 +258,8 @@
     <MESSAGE value="DockerFile added for all services" />
     <MESSAGE value="docker compose for prod and qa" />
     <MESSAGE value="postgress related changes" />
-    <option name="LAST_COMMIT_MESSAGE" value="postgress related changes" />
+    <MESSAGE value="eurekaserver added" />
+    <option name="LAST_COMMIT_MESSAGE" value="eurekaserver added" />
     <option name="NON_MODAL_COMMIT_POSTPONE_SLOW_CHECKS" value="false" />
   </component>
 </project>

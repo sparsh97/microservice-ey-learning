@@ -20,5 +20,29 @@ to discuss what you would like to change.
 
 Please make sure to update the tests as appropriate.
 
-## License
+## For Local Testing
+RabbitMQ
+````
+docker run -it --rm --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:4.0-management
+````
+using postgress docker image
+````
+datasource:
+    url: jdbc:postgresql://localhost:5432/accounts
+    username: postgress
+    password: postgress
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+````      
+using h2 db for without docker
+````
+datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
 
+````
