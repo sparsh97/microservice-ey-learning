@@ -1,84 +1,84 @@
 services:
-  accountsdb:
-    image: postgres:17.4
-    environment:
-      POSTGRES_USER: postgress
-      POSTGRES_PASSWORD: postgress
-      POSTGRES_DB: accounts
-    ports:
-      - "5432:5432"
-    volumes:
-      - accounts_db:/var/lib/postgresql/data
-    networks:
-      - sv
-    healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U postgress -d accounts" ]
-      interval: 10s   # Check every 10 seconds
-      timeout: 5s     # Timeout if no response in 5 seconds
-      retries: 5      # Retry up to 5 times before marking as unhealthy
-      start_period: 10s # Wait 10s before the first check
+#  accountsdb:
+#    image: postgres:17.4
+#    environment:
+#      POSTGRES_USER: postgress
+#      POSTGRES_PASSWORD: postgress
+#      POSTGRES_DB: accounts
+#    ports:
+#      - "5432:5432"
+#    volumes:
+#      - accounts_db:/var/lib/postgresql/data
+#    networks:
+#      - sv
+#    healthcheck:
+#      test: [ "CMD-SHELL", "pg_isready -U postgress -d accounts" ]
+#      interval: 10s   # Check every 10 seconds
+#      timeout: 5s     # Timeout if no response in 5 seconds
+#      retries: 5      # Retry up to 5 times before marking as unhealthy
+#      start_period: 10s # Wait 10s before the first check
+#
+#  loansdb:
+#    image: postgres:17.4
+#    environment:
+#      POSTGRES_USER: postgress
+#      POSTGRES_PASSWORD: postgress
+#      POSTGRES_DB: loans
+#    ports:
+#      - "5434:5432"
+#    volumes:
+#      - loans_db:/var/lib/postgresql/data
+#    networks:
+#      - sv
+#    healthcheck:
+#      test: [ "CMD-SHELL", "pg_isready -U postgress -d loans" ]
+#      interval: 10s   # Check every 10 seconds
+#      timeout: 5s     # Timeout if no response in 5 seconds
+#      retries: 5      # Retry up to 5 times before marking as unhealthy
+#      start_period: 10s # Wait 10s before the first check
+#
+#  cardsdb:
+#    image: postgres:17.4
+#    environment:
+#      POSTGRES_USER: postgress
+#      POSTGRES_PASSWORD: postgress
+#      POSTGRES_DB: cards
+#    ports:
+#      - "5433:5432"
+#    volumes:
+#      - cards_db:/var/lib/postgresql/data
+#    networks:
+#      - sv
+#    healthcheck:
+#      test: [ "CMD-SHELL", "pg_isready -U postgress -d cards" ]
+#      interval: 10s   # Check every 10 seconds
+#      timeout: 5s     # Timeout if no response in 5 seconds
+#      retries: 5      # Retry up to 5 times before marking as unhealthy
+#      start_period: 10s # Wait 10s before the first check
 
-  loansdb:
-    image: postgres:17.4
-    environment:
-      POSTGRES_USER: postgress
-      POSTGRES_PASSWORD: postgress
-      POSTGRES_DB: loans
-    ports:
-      - "5434:5432"
-    volumes:
-      - loans_db:/var/lib/postgresql/data
-    networks:
-      - sv
-    healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U postgress -d loans" ]
-      interval: 10s   # Check every 10 seconds
-      timeout: 5s     # Timeout if no response in 5 seconds
-      retries: 5      # Retry up to 5 times before marking as unhealthy
-      start_period: 10s # Wait 10s before the first check
-
-  cardsdb:
-    image: postgres:17.4
-    environment:
-      POSTGRES_USER: postgress
-      POSTGRES_PASSWORD: postgress
-      POSTGRES_DB: cards
-    ports:
-      - "5433:5432"
-    volumes:
-      - cards_db:/var/lib/postgresql/data
-    networks:
-      - sv
-    healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U postgress -d cards" ]
-      interval: 10s   # Check every 10 seconds
-      timeout: 5s     # Timeout if no response in 5 seconds
-      retries: 5      # Retry up to 5 times before marking as unhealthy
-      start_period: 10s # Wait 10s before the first check
-
-  rabbit:
-    image: rabbitmq:3.13-management
-    hostname: rabbitmq
-    ports:
-      - "5672:5672"
-      - "15672:15672"
-    healthcheck:
-      test: rabbitmq-diagnostics check_port_connectivity
-      interval: 10s
-      timeout: 5s
-      retries: 10
-      start_period: 5s
-    networks:
-      - sv
+#  rabbit:
+#    image: rabbitmq:3.13-management
+#    hostname: rabbitmq
+#    ports:
+#      - "5672:5672"
+#      - "15672:15672"
+#    healthcheck:
+#      test: rabbitmq-diagnostics check_port_connectivity
+#      interval: 10s
+#      timeout: 5s
+#      retries: 10
+#      start_period: 5s
+#    networks:
+#      - sv
 
   configserver:
-    image: "sparshverma/configserver:v3"
-    container_name: configserver-ms-v3
+    image: "sparshverma/configserver:v4"
+    container_name: configserver-ms-v4
     ports:
       - "8071:8071"
-    depends_on:
-      rabbit:
-        condition: service_healthy
+#    depends_on:
+#      rabbit:
+#        condition: service_healthy
     healthcheck:
       test: "curl --fail --silent localhost:8071/actuator/health/readiness | grep UP || exit 1"
       interval: 10s
@@ -91,14 +91,43 @@ services:
     networks:
       - sv
 
-  accounts:
-    image: "sparshverma/accounts:v3"
-    container_name: accounts-ms-v3
+  eurekaserver:
+    image: "sparshverma/eurekaserver:v4"
+    container_name: eurekaserver-ms
+    ports:
+      - "8070:8070"
     depends_on:
-      accountsdb:
-        condition: service_healthy
       configserver:
         condition: service_healthy
+    healthcheck:
+      test: "curl --fail --silent localhost:8070/actuator/health/readiness | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    environment:
+      SPRING_PROFILES_ACTIVE: default
+      SPRING_APPLICATION_NAME: "eurekaserver"
+      SPRING_CONFIG_IMPORT: "configserver:http://configserver:8071/"
+    networks:
+      - sv
+
+  accounts:
+    image: "sparshverma/accounts:v4"
+    container_name: accounts-ms-v3
+    depends_on:
+#      accountsdb:
+#        condition: service_healthy
+      configserver:
+        condition: service_healthy
+      eurekaserver:
+        condition: service_healthy
+    healthcheck:
+      test: "curl --fail --silent localhost:8080/actuator/health/readiness | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
     ports:
       - "8080:8080"
     networks:
@@ -108,17 +137,26 @@ services:
       SPRING_CONFIG_IMPORT: "configserver:http://configserver:8071/"
       SPRING_PROFILES_ACTIVE: default
       SPRING_RABBITMQ_HOST: "rabbit"
-      SPRING_DATASOURCE_URL: "jdbc:postgresql://accountsdb:5432/accounts"
-      SPRING_DATASOURCE_USERNAME: "postgress"
+#      SPRING_DATASOURCE_URL: "jdbc:postgresql://accountsdb:5432/accounts"
+#      SPRING_DATASOURCE_USERNAME: "postgress"
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8070/eureka/
 
   cards:
-    image: "sparshverma/cards:v3"
+    image: "sparshverma/cards:v4"
     container_name: cards-ms-v3
     depends_on:
-      cardsdb:
-        condition: service_healthy
+#      cardsdb:
+#        condition: service_healthy
       configserver:
         condition: service_healthy
+      eurekaserver:
+        condition: service_healthy
+    healthcheck:
+      test: "curl --fail --silent localhost:9001/actuator/health/readiness | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
     ports:
       - "9001:9001"
     networks:
@@ -128,17 +166,26 @@ services:
       SPRING_CONFIG_IMPORT: "configserver:http://configserver:8071/"
       SPRING_PROFILES_ACTIVE: default
       SPRING_RABBITMQ_HOST: "rabbit"
-      SPRING_DATASOURCE_URL: "jdbc:postgresql://cardsdb:5432/cards"
-      SPRING_DATASOURCE_USERNAME: "postgress"
+#      SPRING_DATASOURCE_URL: "jdbc:postgresql://cardsdb:5432/cards"
+#      SPRING_DATASOURCE_USERNAME: "postgress"
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8070/eureka/
 
   loans:
-    image: "sparshverma/loans:v3"
+    image: "sparshverma/loans:v4"
     container_name: loans-ms-v3
     depends_on:
-      loansdb:
-        condition: service_healthy
+#      loansdb:
+#        condition: service_healthy
       configserver:
         condition: service_healthy
+      eurekaserver:
+        condition: service_healthy
+    healthcheck:
+      test: "curl --fail --silent localhost:8090/actuator/health/readiness | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
     ports:
       - "8090:8090"
     networks:
@@ -148,8 +195,29 @@ services:
       SPRING_CONFIG_IMPORT: "configserver:http://configserver:8071/"
       SPRING_PROFILES_ACTIVE: default
       SPRING_RABBITMQ_HOST: "rabbit"
-      SPRING_DATASOURCE_URL: "jdbc:postgresql://loansdb:5432/loans"
-      SPRING_DATASOURCE_USERNAME: "postgress"
+#      SPRING_DATASOURCE_URL: "jdbc:postgresql://loansdb:5432/loans"
+#      SPRING_DATASOURCE_USERNAME: "postgress"
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8070/eureka/
+
+  gatewayserver:
+    image: "sparshverma/gatewayserver:v1"
+    container_name: gatewayserver-v1
+    depends_on:
+      accounts:
+        condition: service_healthy
+      loans:
+        condition: service_healthy
+      cards:
+        condition: service_healthy
+    ports:
+      - "8072:8072"
+    networks:
+      - sv
+    environment:
+      SPRING_APPLICATION_NAME: "gatewayserver"
+      SPRING_CONFIG_IMPORT: "configserver:http://configserver:8071/"
+      SPRING_PROFILES_ACTIVE: default
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8070/eureka/
 
 networks:
   sv:
