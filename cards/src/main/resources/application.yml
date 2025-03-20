@@ -4,12 +4,19 @@ spring:
   application:
     name: cards
   datasource:
-    url: jdbc:postgresql://localhost:5432/cards
-    username: postgress
-    password: postgress
-    driver-class-name: org.postgresql.Driver
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
   jpa:
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    database-platform: org.hibernate.dialect.H2Dialect
+#  datasource:
+#    url: jdbc:postgresql://localhost:5432/cards
+#    username: postgress
+#    password: postgress
+#    driver-class-name: org.postgresql.Driver
+#  jpa:
+#    database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: validate
     show-sql: true
@@ -19,8 +26,52 @@ spring:
     enabled: true
   config:
     import: "optional:configserver:http://localhost:8071/"
-  rabbitmq:
-    host: "localhost"
-    port: 5672
-    username: "guest"
-    password: "guest"
+#  rabbitmq:
+#    host: "localhost"
+#    port: 5672
+#    username: "guest"
+#    password: "guest"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  health:
+    readiness-state:
+      enabled: true
+    liveness-state:
+      enabled: true
+  endpoint:
+    shutdown:
+      access: unrestricted
+    health:
+      probes:
+        enabled: true
+  info:
+    env:
+      enabled: true
+endpoints:
+  shutdown:
+    enabled: true
+
+eureka:
+  instance:
+    preferIpAddress: true
+  client:
+    fetchRegistry: true
+    registerWithEureka: true
+    serviceUrl:
+      defaultZone: http://localhost:8070/eureka/
+
+info:
+  app:
+    name: "cards"
+    description: "Cards Service"
+    version: "1.0.0"
+
+logging:
+  level:
+    com:
+      eazybytes:
+        cards: DEBUG
