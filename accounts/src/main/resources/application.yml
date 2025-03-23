@@ -101,3 +101,10 @@ resilience4j.retry:
       ignoreExceptions:
         - java.lang.NullPointerException
 
+resilience4j.ratelimiter:
+  configs:
+    default:
+      timeoutDuration: 1000
+      limitRefreshPeriod: 5000
+      limitForPeriod: 1
+
