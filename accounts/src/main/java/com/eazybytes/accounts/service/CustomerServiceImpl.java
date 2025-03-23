@@ -34,8 +34,12 @@ public class CustomerServiceImpl implements ICustomerService {
 
         CustomerDetailsDto customerDetailsDto = CMapper.mapToCustomerDetailsDto(customer, new CustomerDetailsDto());
         customerDetailsDto.setAccounts(accountDto);
-        customerDetailsDto.setCards(cardsDto.getBody());
-        customerDetailsDto.setLoans(loansDto.getBody());
+        if (null != cardsDto) {
+            customerDetailsDto.setCards(cardsDto.getBody());
+        }
+        if (null != loansDto) {
+            customerDetailsDto.setLoans(loansDto.getBody());
+        }
         return customerDetailsDto;
     }
 }

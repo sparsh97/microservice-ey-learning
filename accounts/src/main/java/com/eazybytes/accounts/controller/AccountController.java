@@ -5,10 +5,13 @@ import com.eazybytes.accounts.constants.AccountsConstants;
 import com.eazybytes.accounts.dto.CustomerDTO;
 import com.eazybytes.accounts.dto.ResponseDto;
 import com.eazybytes.accounts.service.IAccountService;
+import io.github.resilience4j.retry.annotation.Retry;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +34,8 @@ import org.springframework.web.bind.annotation.RestController;
         description = "CRUD REST APIs for create, update, fetch and delete"
 )
 public class AccountController {
+
+    private static final Logger logger = LoggerFactory.getLogger(AccountController.class);
 
     private final IAccountService accountService;
 
@@ -73,9 +78,16 @@ public class AccountController {
         return new ResponseEntity<>(new ResponseDto(AccountsConstants.STATUS_417, AccountsConstants.MESSAGE_417_DELETE), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @Retry(name = "getContactInfo", fallbackMethod = "getContactInfoFallback")
     @GetMapping(path = "/contact-info")
     public ResponseEntity<ContactInfoConfig> getContactInfo() {
+        logger.info("getContactInfo method is invoked ---> ");
         return new ResponseEntity<>(infoConfig,HttpStatus.OK);
     }
 
+    public ResponseEntity<ContactInfoConfig> getContactInfoFallback(Throwable throwable) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new ContactInfoConfig("",""));
+    }
 }

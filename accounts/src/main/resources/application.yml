@@ -34,6 +34,10 @@ spring:
 #    port: 5672
 #    username: "guest"
 #    password: "guest"
+  cloud:
+    openfeign:
+      circuitbreaker:
+        enabled: true
 
 management:
   endpoints:
@@ -78,3 +82,19 @@ logging:
     com:
       eazybytes:
         accounts: DEBUG
+
+resilience4j.circuitbreaker:
+  configs:
+    default:
+      slidingWindowSize: 10
+      permittedNumberOfCallsInHalfOpenState: 2
+      failureRateThreshold: 50
+      waitDurationInOpenState: 10000
+
+resilience4j.retry:
+  configs:
+    default:
+      maxAttempts: 3
+      waitDuration: 100
+      enableExponentialBackoff: true
+      exponentialBackoffMultiplier: 2
