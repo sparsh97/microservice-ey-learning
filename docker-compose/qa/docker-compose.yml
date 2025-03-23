@@ -220,6 +220,8 @@ services:
         condition: service_healthy
       cards:
         condition: service_healthy
+      redis:
+        condition: service_healthy
     ports:
       - "8072:8072"
     networks:

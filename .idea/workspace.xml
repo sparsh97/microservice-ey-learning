@@ -4,12 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="981f8257-3235-4f55-8c71-12c3220017c8" name="Changes" comment="code refactoring in gateway service">
+    <list default="true" id="981f8257-3235-4f55-8c71-12c3220017c8" name="Changes" comment="docker-compose changes">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/accounts/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/accounts/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gatewayserver/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/gatewayserver/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gatewayserver/src/main/java/verma/sparsh/gatewayserver/GatewayserverApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/gatewayserver/src/main/java/verma/sparsh/gatewayserver/GatewayserverApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gatewayserver/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/gatewayserver/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose/default/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose/default/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose/prod/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose/prod/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose/qa/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose/qa/docker-compose.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -70,7 +69,7 @@
     "settings.editor.selected.configurable": "io.github.pandier.intellijdiscordrp.settings.project.DiscordProjectSettingsConfigurable"
   }
 }]]></component>
-  <component name="RunManager" selected="Application.GatewayserverApplication">
+  <component name="RunManager" selected="Docker.default: Compose Deployment">
     <configuration name="CardsApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.eazybytes.cards.CardsApplication" />
       <module name="cards" />
@@ -139,11 +138,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Docker.default: Compose Deployment" />
         <item itemvalue="Application.GatewayserverApplication" />
         <item itemvalue="Application.CardsApplication" />
         <item itemvalue="Application.EurekaserverApplication" />
         <item itemvalue="Application.ConfigserverApplication" />
-        <item itemvalue="Docker.default: Compose Deployment" />
       </list>
     </recent_temporary>
   </component>
@@ -164,7 +163,23 @@
       <option name="project" value="LOCAL" />
       <updated>1742726680165</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="redis rate limiter added for cards service in api gateway">
+      <option name="closed" value="true" />
+      <created>1742731631307</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1742731631307</updated>
+    </task>
+    <task id="LOCAL-00003" summary="docker-compose changes">
+      <option name="closed" value="true" />
+      <created>1742732164110</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1742732164110</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -172,7 +187,9 @@
     <option name="CHECK_NEW_TODO" value="false" />
     <MESSAGE value="eurekaserver added" />
     <MESSAGE value="code refactoring in gateway service" />
-    <option name="LAST_COMMIT_MESSAGE" value="code refactoring in gateway service" />
+    <MESSAGE value="redis rate limiter added for cards service in api gateway" />
+    <MESSAGE value="docker-compose changes" />
+    <option name="LAST_COMMIT_MESSAGE" value="docker-compose changes" />
     <option name="NON_MODAL_COMMIT_POSTPONE_SLOW_CHECKS" value="false" />
   </component>
 </project>

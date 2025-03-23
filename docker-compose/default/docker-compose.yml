@@ -123,7 +123,7 @@ services:
       - sv
 
   accounts:
-    image: "sparshverma/accounts:v4"
+    image: "sparshverma/accounts:v5"
     container_name: accounts-ms-v3
     depends_on:
 #      accountsdb:
@@ -152,7 +152,7 @@ services:
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8070/eureka/
 
   cards:
-    image: "sparshverma/cards:v4"
+    image: "sparshverma/cards:v5"
     container_name: cards-ms-v3
     depends_on:
 #      cardsdb:
@@ -181,7 +181,7 @@ services:
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8070/eureka/
 
   loans:
-    image: "sparshverma/loans:v4"
+    image: "sparshverma/loans:v5"
     container_name: loans-ms-v3
     depends_on:
 #      loansdb:
@@ -210,7 +210,7 @@ services:
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8070/eureka/
 
   gatewayserver:
-    image: "sparshverma/gatewayserver:v1"
+    image: "sparshverma/gatewayserver:v2"
     container_name: gatewayserver-v1
     depends_on:
       accounts:
@@ -218,6 +218,8 @@ services:
       loans:
         condition: service_healthy
       cards:
+        condition: service_healthy
+      redis:
         condition: service_healthy
     ports:
       - "8072:8072"
