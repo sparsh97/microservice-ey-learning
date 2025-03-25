@@ -25,8 +25,10 @@ RUN apk --no-cache add curl grep wget
 # Copy the Spring Boot application JAR file into the container
 COPY --from=builder /app/target/*.jar app.jar
 
+RUN mkdir -p /app/libs && \
+    wget -O /app/libs/opentelemetry-javaagent-2.11.0.jar https://repo1.maven.org/maven2/io/opentelemetry/javaagent/opentelemetry-javaagent/2.11.0/opentelemetry-javaagent-2.11.0.jar
 # Expose the application port (change this based on your Spring Boot config)
 EXPOSE 8072
 
 # Run the application
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-javaagent:/app/libs/opentelemetry-javaagent-2.11.0.jar", "-jar", "app.jar"]

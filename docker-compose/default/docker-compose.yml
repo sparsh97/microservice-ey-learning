@@ -123,6 +123,9 @@ services:
       - gateway
     networks:
       - sv
+    extends:
+      file: common-config.yml
+      service: otel-config
 
   minio:
     image: minio/minio
@@ -149,6 +152,38 @@ services:
       retries: 5
     networks:
       - sv
+    extends:
+      file: common-config.yml
+      service: otel-config
+
+  prometheus:
+    image: prom/prometheus:v3.1.0
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ../observability/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    extends:
+      file: common-config.yml
+      service: otel-config
+    networks:
+      - sv
+
+
+  tempo:
+    image: grafana/tempo:2.6.1
+    container_name: tempo
+    command: -config.file /etc/tempo-config.yml
+    ports:
+      - "3110:3100"
+      - "4318:4318"
+    volumes:
+      - ../observability/tempo/tempo.yml:/etc/tempo-config.yml
+    extends:
+      file: common-config.yml
+      service: otel-config
+    networks:
+      - sv
 
   grafana:
     image: grafana/grafana:latest
@@ -162,22 +197,11 @@ services:
       - sh
       - -euc
       - |
-        mkdir -p /etc/grafana/provisioning/datasources
-        cat <<EOF > /etc/grafana/provisioning/datasources/ds.yaml
-        apiVersion: 1
-        datasources:
-          - name: Loki
-            type: loki
-            access: proxy
-            url: http://gateway:3100
-            jsonData:
-              httpHeaderName1: "X-Scope-OrgID"
-            secureJsonData:
-              httpHeaderValue1: "tenant1"
-        EOF
         /run.sh
     ports:
       - "3000:3000"
+    volumes:
+      - ../observability/grafana/datasource.yml:/etc/grafana/provisioning/datasources/datasource.yml
     healthcheck:
       test: [ "CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:3000/api/health || exit 1" ]
       interval: 10s
@@ -185,6 +209,9 @@ services:
       retries: 5
     networks:
       - sv
+    extends:
+      file: common-config.yml
+      service: otel-config
 
   backend:
     image: grafana/loki:latest
@@ -198,6 +225,9 @@ services:
       - gateway
     networks:
       - sv
+    extends:
+      file: common-config.yml
+      service: otel-config
 
   gateway:
     image: nginx:latest
@@ -280,7 +310,7 @@ services:
       - sv
 
   configserver:
-    image: "sparshverma/configserver:v4"
+    image: "sparshverma/configserver:v5"
     container_name: configserver-ms-v4
     ports:
       - "8071:8071"
@@ -289,18 +319,21 @@ services:
 #        condition: service_healthy
     healthcheck:
       test: "curl --fail --silent localhost:8071/actuator/health/readiness | grep UP || exit 1"
-      interval: 10s
+      interval: 20s
       timeout: 5s
-      retries: 10
+      retries: 20
       start_period: 10s
     environment:
       SPRING_RABBITMQ_HOST: "rabbit"
       SPRING_PROFILES_ACTIVE: native
     networks:
       - sv
+    extends:
+      file: common-config.yml
+      service: otel-config
 
   eurekaserver:
-    image: "sparshverma/eurekaserver:v4"
+    image: "sparshverma/eurekaserver:v5"
     container_name: eurekaserver-ms
     ports:
       - "8070:8070"
@@ -309,9 +342,9 @@ services:
         condition: service_healthy
     healthcheck:
       test: "curl --fail --silent localhost:8070/actuator/health/readiness | grep UP || exit 1"
-      interval: 10s
+      interval: 20s
       timeout: 5s
-      retries: 10
+      retries: 20
       start_period: 10s
     environment:
       SPRING_PROFILES_ACTIVE: default
@@ -319,6 +352,9 @@ services:
       SPRING_CONFIG_IMPORT: "configserver:http://configserver:8071/"
     networks:
       - sv
+    extends:
+      file: common-config.yml
+      service: otel-config
 
   accounts:
     image: "sparshverma/accounts:v5"
@@ -332,9 +368,9 @@ services:
         condition: service_healthy
     healthcheck:
       test: "curl --fail --silent localhost:8080/actuator/health/readiness | grep UP || exit 1"
-      interval: 10s
+      interval: 20s
       timeout: 5s
-      retries: 10
+      retries: 20
       start_period: 10s
     ports:
       - "8080:8080"
@@ -348,6 +384,9 @@ services:
 #      SPRING_DATASOURCE_URL: "jdbc:postgresql://accountsdb:5432/accounts"
 #      SPRING_DATASOURCE_USERNAME: "postgress"
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8070/eureka/
+    extends:
+      file: common-config.yml
+      service: otel-config
 
   cards:
     image: "sparshverma/cards:v5"
@@ -361,9 +400,9 @@ services:
         condition: service_healthy
     healthcheck:
       test: "curl --fail --silent localhost:9001/actuator/health/readiness | grep UP || exit 1"
-      interval: 10s
+      interval: 20s
       timeout: 5s
-      retries: 10
+      retries: 20
       start_period: 10s
     ports:
       - "9001:9001"
@@ -377,6 +416,9 @@ services:
 #      SPRING_DATASOURCE_URL: "jdbc:postgresql://cardsdb:5432/cards"
 #      SPRING_DATASOURCE_USERNAME: "postgress"
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8070/eureka/
+    extends:
+      file: common-config.yml
+      service: otel-config
 
   loans:
     image: "sparshverma/loans:v5"
@@ -390,9 +432,9 @@ services:
         condition: service_healthy
     healthcheck:
       test: "curl --fail --silent localhost:8090/actuator/health/readiness | grep UP || exit 1"
-      interval: 10s
+      interval: 20s
       timeout: 5s
-      retries: 10
+      retries: 20
       start_period: 10s
     ports:
       - "8090:8090"
@@ -406,9 +448,12 @@ services:
 #      SPRING_DATASOURCE_URL: "jdbc:postgresql://loansdb:5432/loans"
 #      SPRING_DATASOURCE_USERNAME: "postgress"
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8070/eureka/
+    extends:
+      file: common-config.yml
+      service: otel-config
 
   gatewayserver:
-    image: "sparshverma/gatewayserver:v2"
+    image: "sparshverma/gatewayserver:v5"
     container_name: gatewayserver-v1
     depends_on:
       accounts:
@@ -432,6 +477,9 @@ services:
       SPRING_DATA_REDIS_HOST: redis
       SPRING_DATA_REDIS_PORT: 6379
       SPRING_DATA_REDIS_TIMEOUT: 1s
+    extends:
+      file: common-config.yml
+      service: otel-config
 
 networks:
   sv:
