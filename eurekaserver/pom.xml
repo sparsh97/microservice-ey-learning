@@ -80,7 +80,7 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
 					<image>
-						<name>sparshverma438/${project.artifactId}:v5</name>
+						<name>sparshverma/${project.artifactId}:v6</name>
 					</image>
 				</configuration>
 			</plugin>

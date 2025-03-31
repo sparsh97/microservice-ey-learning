@@ -156,7 +156,7 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
 					<image>
-						<name>sparshverma/${project.artifactId}:v1</name>
+						<name>sparshverma/accounts:v6</name>
 					</image>
 					<excludes>
 						<exclude>
