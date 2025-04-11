@@ -1,0 +1,308 @@
+
+
+Low-Level Design Document for User Management Feature
+Overview
+This document outlines the low-level design (LLD) for the User Management feature within the application. It includes details about the User and Audit entities, the database schema, and the REST APIs required for managing user accounts.
+1. User Entity
+The User entity represents the users of the system. Each user has specific attributes that define their identity and role within the application.
+Attributes
+•	UserId: Unique identifier for each user (Primary Key, Auto-increment).
+•	Username: Mandatory field for user identification.
+•	FirstName: Mandatory field for the user's first name.
+•	LastName: Mandatory field for the user's last name.
+•	Email: Mandatory field for the user's email address.
+•	Role: Mandatory field defining the user's role. Possible values include: 
+o	System_Admin
+o	Business_Partner
+o	Master_Admin
+o	Merchant
+•	Status: Indicates whether the user is active or inactive (Default: Active).
+•	Password: Mandatory field for user authentication.
+•	FirstTimeLogin: Boolean indicating if it's the user's first login (Default: true).
+•	LoginStatus: Integer representing the login status (0 for logged out, 1 for logged in).
+•	CreatedDate: Timestamp for when the user was created.
+•	ModifiedDate: Timestamp for when the user was last modified.
+•	CreatedBy: Identifier for the user who created this account.
+Database Schema -User
+sql
+CREATE TABLE User (
+    UserId INT AUTO_INCREMENT PRIMARY KEY,
+    Username VARCHAR(255) NOT NULL,
+    FirstName VARCHAR(255) NOT NULL,
+    LastName VARCHAR(255) NOT NULL,
+    Email VARCHAR(255) NOT NULL,
+    Role ENUM('System_Admin', 'Business_Partner', 'Master_Admin', 'Merchant') NOT NULL,
+    Status ENUM('Active', 'Inactive') DEFAULT 'Active',
+    Password VARCHAR(255) NOT NULL,
+    CreatedDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+    ModifiedDate DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CreatedBy VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE User_Login (
+
+    UserLoginId INT AUTO_INCREMENT PRIMARY KEY,
+    Username VARCHAR(255) NOT NULL,
+    FirstTimeLogin BOOLEAN DEFAULT TRUE,
+    LoginStatus BOOLEAN DEFAULT TRUE,
+    Failed_Login_Attempts INT DEFAULT 0,
+    LockExpiry DATETIME
+   
+);
+2. Audit Entity
+The Audit entity is used to track actions performed on user accounts for security and compliance purposes.
+Attributes
+•	AuditId: Unique identifier for each audit record (Primary Key, Auto-increment).
+•	Action: ENUM type to restrict possible actions. Possible values include: 
+o	USER_CREATION
+o	USER_MODIFICATION
+o	RESET_PASSWORD
+o	LOGIN
+o	LOGOUT
+•	Description: Text field for additional details about the action.
+•	CreatedBy: Identifier for the user who performed the action.
+•	CreatedDate: Timestamp for when the action was performed.
+Database Schema
+sql
+CREATE TABLE Audit (
+    AuditId INT AUTO_INCREMENT PRIMARY KEY,
+    Action ENUM('USER_CREATION', 'USER_MODIFICATION', 'RESET_PASSWORD', 'LOGIN', 'LOGOUT') NOT NULL,
+    Description TEXT,
+    CreatedBy VARCHAR(255) NOT NULL,
+    CreatedDate DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+3. REST APIs
+3.1 Create User API
+•	URL: /user
+•	Method: POST
+•	Request Body: 
+json
+{
+    "Username": "john_doe",
+    "FirstName": "John",
+    "LastName": "Doe",
+    "Email": "john.doe@example.com",
+    "Role": "Business_Partner",
+    "Password": "securePassword123"
+}
+•	Request Header: userkey (logged in username)
+•	Response: 
+json
+{
+    "UserId": 1,
+    "Username": "jane_smith",
+    "FirstName": "Jane",
+    "LastName": "Smith",
+    "Email": "jane.smith@example.com",
+    "Role": "Master_Admin"
+}
+•	Error: Username Already exists.
+3.2 Update User API
+•	URL: /user/{userId}
+•	Method: PUT
+•	Request Body: 
+json
+{
+    "FirstName": "John",
+    "LastName": "Doe",
+    "Email": "john.doe@example.com",
+    "Role": "Business_Partner",
+    "Status": "Active"
+}
+•	Request Header: userkey (logged in username)
+•	Response: 
+json
+{
+    "UserId": 1,
+    "Username": "jane_smith",
+    "FirstName": "Jane",
+    "LastName": "Smith",
+    "Email": "jane.smith@example.com",
+    "Role": "Master_Admin"
+}
+3.3 Password Reset API
+•	URL: /user/{userId}/password
+•	Method: PUT
+•	Request Body: 
+json
+{
+    "Password": "ffjjh32345"
+}
+•	Request Header: userkey (logged in username)
+•	Response: 
+json
+{
+    "UserId": 1,
+    "Username": "jane_smith",
+    "FirstName": "Jane",
+    "LastName": "Smith",
+    "Email": "jane.smith@example.com",
+    "Role": "Master_Admin"
+}
+3.4 Generate Password API
+•	URL: /util/password
+•	Method: GET
+•	Request Header: userkey (logged in username)
+•	Response: 
+json
+{
+    "Password": "ffjjh32345"
+}
+3.5 User List API
+•	URL: /user
+•	Method: GET
+•	Request Parameters: 
+json
+{
+    "PageNo": 1
+}
+•	Request Header: userkey (logged in username)
+•	Response: 
+json
+{
+    "users": [
+        {
+            "UserId": 1,
+            "Username": "jane_smith",
+            "FirstName": "Jane",
+            "LastName": "Smith",
+            "Email": "jane.smith@example.com",
+            "Role": "Master_Admin",
+            "Status": "Active"
+        },
+        {
+            "UserId": 2,
+            "Username": "john_doe",
+            "FirstName": "John",
+            "LastName": "Doe",
+            "Email": "john.doe@example.com",
+            "Role": "Business_Partner",
+            "Status": "Active"
+        }
+    ]
+}
+3.6 Get User API
+•	URL: /user/{userId}
+•	Method: GET
+•	Request Header: userkey (logged in username)
+•	Response: 
+json
+{
+    "UserId": 1,
+    "Username": "jane_smith",
+    "FirstName": "Jane",
+    "LastName": "Smith",
+    "Email": "jane.smith@example.com",
+    "Role": "Master_Admin",
+    "Status": "Active"
+}
+3.7 Login API
+•	URL: /user/login
+•	Method: POST
+•	Request Body: 
+json
+{
+    "UserName": "john",
+    "Password": "hidjfdi"
+}
+•	Response: 
+json
+{
+    "UserId": 1,
+    "Username": "jane_smith",
+    "FirstName": "Jane",
+    "LastName": "Smith",
+    "Email": "jane.smith@example.com",
+    "Role": "Master_Admin",
+    "Status": "Active",
+    "FirstTimeLogin": true
+}
+3.8 Logout API
+•	URL: /user/logout
+•	Method: POST
+•	Request Header: userkey (logged in username)
+•	Response: HTTP Status Code 200
+
+
+
+
+Conclusion
+This document provides a comprehensive low-level design for the User Management feature, detailing the user and audit entities, database schema, and REST APIs. This design ensures that user accounts can be effectively managed while maintaining security and auditability.
+
+OFC Schema
+
+CREATE TABLE CORPORATE_VIRTUAL_ACCOUNT (
+    CORPORATE_VIRTUAL_ACCOUNT_ID bigint AUTO_INCREMENT PRIMARY KEY,
+    PREFIX_ID bigint NOT NULL,
+    VIRTUAL_ACCOUNT_NO VARCHAR(255) NOT NULL,
+    BANK_NAME VARCHAR(255) NOT NULL,
+    CUSTOMER_NAME VARCHAR(255) NOT NULL,
+   CUSTOMER_TYPE VARCHAR(255) NOT NULL,
+    ZSMART_ACCOUNT_NO VARCHAR(255) NOT NULL,
+    SAP_POSTING_TYPE ENUM('BOTH', 'SAP_AR', 'SAP_DEPOSIT') NOT NULL,
+    IS_ACTIVE BOOLEAN DEFAULT TRUE,
+    Password VARCHAR(255) NOT NULL,
+    CreatedDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+    ModifiedDate DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CreatedBy VARCHAR(255) NOT NULL,
+    ModifiedBy VARCHAR(255) NOT NULL
+
+);
+
+
+CREATE TABLE PREFIX_DETAILS (
+    PREFIX_ID  bigint AUTO_INCREMENT PRIMARY KEY,
+    PREFIX  VARCHAR(15) NOT NULL,
+    TYPE VARCHAR(255) NOT NULL,
+    CreatedDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+    ModifiedDate DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CreatedBy VARCHAR(255) NOT NULL,
+    ModifiedBy VARCHAR(255) NOT NULL
+
+);
+
+BankGateway schema
+CREATE TABLE `TRANSACTION_DETAILS` (
+  `TRANSACTION_ID` bigint NOT NULL,
+  `ORDER_STATUS` varchar(50) DEFAULT NULL,
+  `ZSMART_RESPONSE_CODE` varchar(2) DEFAULT NULL,
+  `START_DATE_TIME` datetime(6) DEFAULT NULL,
+  `COMPLETION_DATE_TIME` datetime DEFAULT NULL,
+  `TRANSACTION_TYPE` varchar(50) DEFAULT NULL,
+  `DESTINATION_MDN` varchar(50) DEFAULT NULL,
+  `AMOUNT_BANK` varchar(50) DEFAULT NULL,
+  `AMOUNT_ZSMART` varchar(50) DEFAULT NULL,
+  `CURRENCY` varchar(50) DEFAULT NULL,
+  `CHANNEL_NAME` varchar(50) DEFAULT NULL,
+  `BANK_NAME` varchar(50) DEFAULT NULL,
+  `REFERENCE_NO` varchar(50) DEFAULT NULL,
+  `SOURCE_MDN` varchar(50) DEFAULT NULL,
+  `BANK_GATEWAY_RRN` varchar(50) DEFAULT NULL,
+  `BANK_RRN` varchar(50) DEFAULT NULL,
+  `BANK_GATEWAY_STAN` varchar(255) DEFAULT NULL,
+  `BANK_STAN` varchar(50) DEFAULT NULL,
+  `BANK_RESPONSE_CODE` varchar(50) DEFAULT NULL,
+  `ERROR_DESCRIPTION` varchar(50) DEFAULT NULL,
+  `STATUS` varchar(50) DEFAULT NULL,
+  `ISO8583_VARIANT` varchar(50) DEFAULT NULL,
+  `IPP_CODE` varchar(50) DEFAULT NULL,
+  `IPP_ID` varchar(50) DEFAULT NULL,
+  `IPP_NAME` varchar(50) DEFAULT NULL,
+  `CREATED_ON` datetime(6) DEFAULT NULL,
+  `CREATED_BY` varchar(50) DEFAULT NULL,
+  `UPDATED_ON` datetime(6) DEFAULT NULL,
+  `UPDATED_BY` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`TRANSACTION_ID`)
+)
+
+Corporate Virtual Account
+1)	Create account -refer bss document
+2)	Update Account- Refer bss document
+3)	List API- list all with pagination
+4)	Search api – refer jira
+Transaction
+
+1)	List API with Paginatiom
+2)	Search api-refer jira
+•	
+
